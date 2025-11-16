@@ -5,7 +5,9 @@ import os
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "buildsensei.db")
-DATASET_PATH = os.path.join(os.path.dirname(BASE_DIR), "datasets")
+# Sube dos niveles desde la ubicación del script (database -> backend -> raíz)
+# y luego entra a la carpeta 'datasets'.
+DATASET_PATH = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "datasets")
 
 # Dataset → columnas a usar para cada tabla
 TABLE_SPECS = {
