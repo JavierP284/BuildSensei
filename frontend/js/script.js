@@ -5,12 +5,22 @@ async function fillSelect(url, selectId) {
         const select = document.getElementById(selectId);
 
         select.innerHTML = ''; // Limpiar "Cargando..."
-        data.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item;
-            option.textContent = item;
-            select.appendChild(option);
+        const choices = new Choices(select, {
+            searchEnabled: true,
+            itemSelectText: 'Presiona para seleccionar',
+            searchResultLimit: 100,
+            fuseOptions: {
+                threshold: 0.2,
+            },
         });
+
+        const options = data.map(item => ({
+            value: item,
+            label: item,
+        }));
+
+        choices.setChoices(options, 'value', 'label', false);
+
     } catch (error) {
         console.error('Error cargando componentes:', error);
     }

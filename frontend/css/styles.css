@@ -51,3 +51,9 @@ select {
     padding: 10px;
     border-radius: 5px;
 }
+
+/* Estilos para Choices.js */
+.choices__list--dropdown {
+    max-height: 400px;
+    overflow-y: auto;
+}

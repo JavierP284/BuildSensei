@@ -26,7 +26,12 @@ def get_cpus():
 
 @app.route('/api/gpus')
 def get_gpus():
-    gpus = get_components('video_card')
+    """Devuelve una lista de GPUs con formato 'Chipset - Nombre'"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT chipset, name FROM video_card")
+    gpus = [f"{row[0]} - {row[1]}" for row in cursor.fetchall()]
+    conn.close()
     return jsonify(gpus)
 
 if __name__ == '__main__':
