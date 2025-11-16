@@ -1,6 +1,5 @@
 -- =========================================
--- BuildSensei - Database Schema
--- Tablas basadas en los campos seleccionados
+-- BuildSensei - Database Schema (Actualizado)
 -- =========================================
 
 PRAGMA foreign_keys = ON;
@@ -8,21 +7,26 @@ PRAGMA foreign_keys = ON;
 -- ============================
 -- Tabla: CPU
 -- ============================
-CREATE TABLE IF NOT EXISTS cpu (
+DROP TABLE IF EXISTS cpu;
+
+CREATE TABLE cpu (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     price REAL,
-    tdp INTEGER,
-    graphics TEXT,
     core_count INTEGER,
     core_clock REAL,
-    boost_clock REAL
+    boost_clock REAL,
+    microarchitecture TEXT,
+    tdp INTEGER,
+    graphics TEXT
 );
 
 -- ============================
 -- Tabla: Motherboard
 -- ============================
-CREATE TABLE IF NOT EXISTS motherboard (
+DROP TABLE IF EXISTS motherboard;
+
+CREATE TABLE motherboard (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     price REAL,
@@ -35,7 +39,9 @@ CREATE TABLE IF NOT EXISTS motherboard (
 -- ============================
 -- Tabla: RAM
 -- ============================
-CREATE TABLE IF NOT EXISTS memory (
+DROP TABLE IF EXISTS memory;
+
+CREATE TABLE memory (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     price REAL,
@@ -47,7 +53,9 @@ CREATE TABLE IF NOT EXISTS memory (
 -- ============================
 -- Tabla: GPU
 -- ============================
-CREATE TABLE IF NOT EXISTS video_card (
+DROP TABLE IF EXISTS video_card;
+
+CREATE TABLE video_card (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     price REAL,
@@ -59,7 +67,9 @@ CREATE TABLE IF NOT EXISTS video_card (
 -- ============================
 -- Tabla: Power Supply (PSU)
 -- ============================
-CREATE TABLE IF NOT EXISTS power_supply (
+DROP TABLE IF EXISTS power_supply;
+
+CREATE TABLE power_supply (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     price REAL,
