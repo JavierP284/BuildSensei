@@ -1,37 +1,50 @@
+<!doctype html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BuildSensei</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
-    <link rel="stylesheet" href="/frontend/css/styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BuildSensei</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+  <link rel="stylesheet" href="/frontend/css/styles.css" />
 </head>
-
 <body>
-  <div class="container">
-  <header>
-    <img src="/frontend/img/Logo2.21.PNG" alt="BuildSensei logo" width="500">
-    <h1>BuildSensei</h1>
-    <p>Tu maestro en hardware inteligente</p>
-  </header>
+  <div class="container" id="main-container">
+    <header>
+      <img src="/frontend/img/Logo2.21.PNG" alt="BuildSensei logo" id="logo" />
+      <h1>BuildSensei</h1>
+      <p>Tu maestro en hardware inteligente</p>
+    </header>
 
-  <main>
-    <section id="component-selection">
-      <h2>Selecciona tus componentes</h2>
+    <main>
+      <section id="component-selection">
+        <h2>Selecciona tus componentes</h2>
 
-      <label for="cpu-select">CPU:</label>
-      <select id="cpu-select">
-        <option value="">Cargando...</option>
-      </select>
+        <label for="cpu-select">CPU:</label>
+        <select id="cpu-select"><option value="">Seleccionar</option></select>
 
-      <label for="gpu-select">GPU:</label>
-      <select id="gpu-select">
-        <option value="">Cargando...</option>
-      </select>
-    </section>
-  </main>
+        <label for="gpu-select">GPU:</label>
+        <select id="gpu-select"><option value="">Seleccionar</option></select>
+
+        <label for="mobo-select">Motherboard:</label>
+        <select id="mobo-select"><option value="">Seleccionar</option></select>
+
+        <label for="ram-select">Memoria RAM:</label>
+        <select id="ram-select"><option value="">Seleccionar</option></select>
+
+        <label for="psu-select">Fuente de poder (PSU):</label>
+        <select id="psu-select"><option value="">Seleccionar</option></select>
+
+        <button id="check-btn" class="btn btn--primary" style="margin-top:18px;">
+          Verificar compatibilidad
+        </button>
+
+        <div id="result-box" style="margin-top:22px;"></div>
+      </section>
+    </main>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
   <script src="/frontend/js/script.js"></script>
-</div>
 </body>
- 
+</html>
