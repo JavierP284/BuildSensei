@@ -435,8 +435,37 @@ def check_compatibility():
         issues.append(f"El CPU ({cpu}) requiere socket {cpu_socket}, pero la motherboard usa {mb_socket}.")
 
     # RAM ↔ Motherboard
-    if module_count > mb_slots:
-        issues.append(f"La RAM usa {module_count} módulos, pero la motherboard solo tiene {mb_slots} slots.")
+    # Asegurar que mb_slots es un número entero
+    mb_slots_int = safe_number(mb_slots) if mb_slots else 0
+    if not isinstance(mb_slots_int, int) or mb_slots_int <= 0:
+        mb_slots_int = int(mb_slots_int) if mb_slots_int else 0
+    
+    module_count_int = int(module_count) if module_count else 0
+    
+    print(f"RAM Module Count: {module_count_int}, MB Slots: {mb_slots_int}")
+    
+    if module_count_int > mb_slots_int:
+        issues.append(
+            f"Incompatibilidad de RAM: Se requieren {module_count_int} módulos, "
+            f"pero la motherboard solo tiene {mb_slots_int} slots."
+        )
+    elif module_count_int == mb_slots_int and mb_slots_int > 0:
+        #  CAMBIO: Esto es compatible, solo agregar warning
+        warnings.append(
+            f"Uso máximo de slots: La RAM usa todos los {mb_slots_int} slots disponibles. "
+            f"No hay espacio para ampliación futura."
+        )
+    elif module_count_int < mb_slots_int:
+        #  Compatibles con espacio libre
+        free_slots = mb_slots_int - module_count_int
+        if free_slots == 1:
+            warnings.append(
+                f"Slot disponible: La RAM usa {module_count_int} de {mb_slots_int} slots. "
+                f"Queda 1 slot libre para ampliación."
+            )
+        else:
+            # Sin warning si hay 2+ slots libres
+            pass
 
     # PSU ↔ GPU (análisis mejorado con TDP)
     cpu_power_tdp = 125  # TDP estimado por defecto para CPUs
@@ -460,8 +489,8 @@ def check_compatibility():
         )
     elif psu_wattage < total_power_needed * 1.5:
         warnings.append(
-            f"PSU justa. Considere una PSU más potente. Consumo estimado: {total_power_needed}W, "
-            f"PSU actual: {psu_wattage}W (margen: {psu_wattage - total_power_needed}W)."
+            f"PSU ajustada. Consumo estimado: {total_power_needed}W, "
+            f"PSU actual: {psu_wattage}W (margen: {int(psu_wattage - total_power_needed)}W)."
         )
 
     conn.close()
@@ -475,8 +504,12 @@ def check_compatibility():
             "gpu_power_tdp": gpu_power_tdp,
             "cpu_power_tdp": cpu_power_tdp,
             "total_estimated": total_power_needed,
-            "psu_available": psu_wattage,
-            "margin": psu_wattage - total_power_needed
+            "psu_available": int(psu_wattage),
+            "margin": int(psu_wattage - total_power_needed)
+        },
+        "memory_analysis": {
+            "modules_required": int(module_count),
+            "slots_available": int(mb_slots_int)
         }
     }
     
