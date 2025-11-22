@@ -173,17 +173,129 @@ def get_components(component_type):
 # FUNCIONES DE COMPATIBILIDAD
 # ------------------------------------------------
 def deduce_socket(microarch):
-    microarch = microarch.lower()
+    """
+    Deduce el socket del CPU basándose en la microarquitectura.
+    Cubre todas las arquitecturas presentes en la BD.
+    """
+    if not microarch:
+        return None
+    
+    microarch = microarch.lower().strip()
+    
+    # ===== AMD SOCKETS =====
+    # Zen 5 y más nuevos -> AM5
     if "zen 5" in microarch:
         return "AM5"
-    if "zen 4" or "zen 3" or "zen 2" in microarch:
+    
+    # Zen 4 -> AM5
+    if "zen 4" in microarch:
+        return "AM5"
+    
+    # Zen 3 -> AM4
+    if "zen 3" in microarch:
         return "AM4"
-    if "raptor" in microarch or "alder" in microarch:
+    
+    # Zen 2 -> AM4
+    if "zen 2" in microarch:
+        return "AM4"
+    
+    # Zen+ y Zen (primera gen) -> AM4
+    if "zen+" in microarch or (microarch == "zen" and "zen 2" not in microarch and "zen 3" not in microarch and "zen 4" not in microarch and "zen 5" not in microarch):
+        return "AM4"
+    
+    # Piledriver, Steamroller, Excavator (FX, A-series) -> AM3+ o variantes
+    if any(x in microarch for x in ["piledriver", "steamroller", "excavator"]):
+        return "AM3+"
+    
+    # Bulldozer -> AM3+
+    if "bulldozer" in microarch:
+        return "AM3+"
+    
+    # K10, Lynx (antiguos) -> AM2+/AM3
+    if any(x in microarch for x in ["k10", "lynx"]):
+        return "AM2+"
+    
+    # Jaguar (Athlon X4) -> FP2
+    if "jaguar" in microarch:
+        return "FP2"
+    
+    # Puma+ -> FP2
+    if "puma+" in microarch:
+        return "FP2"
+    
+    # ===== INTEL SOCKETS =====
+    # Raptor Lake Refresh, Raptor Lake -> LGA1700
+    if any(x in microarch for x in ["raptor lake", "raptor"]):
         return "LGA1700"
-    if "comet" in microarch or "rocket" in microarch:
+    
+    # Arrow Lake -> LGA1851
+    if "arrow lake" in microarch:
+        return "LGA1851"
+    
+    # Alder Lake -> LGA1700
+    if "alder lake" in microarch:
+        return "LGA1700"
+    
+    # Rocket Lake -> LGA1200
+    if "rocket lake" in microarch:
         return "LGA1200"
-    if "coffee" in microarch or "kaby" in microarch or "skylake" in microarch:
+    
+    # Comet Lake -> LGA1200
+    if "comet lake" in microarch:
+        return "LGA1200"
+    
+    # Coffee Lake, Coffee Lake Refresh -> LGA1151 (rev 2)
+    if "coffee lake" in microarch:
         return "LGA1151"
+    
+    # Kaby Lake -> LGA1151
+    if "kaby lake" in microarch:
+        return "LGA1151"
+    
+    # Skylake -> LGA1151
+    if "skylake" in microarch:
+        return "LGA1151"
+    
+    # Broadwell -> LGA1150
+    if "broadwell" in microarch:
+        return "LGA1150"
+    
+    # Haswell -> LGA1150
+    if "haswell" in microarch:
+        return "LGA1150"
+    
+    # Ivy Bridge -> LGA1155
+    if "ivy bridge" in microarch:
+        return "LGA1155"
+    
+    # Sandy Bridge -> LGA1155
+    if "sandy bridge" in microarch:
+        return "LGA1155"
+    
+    # Nehalem, Westmere -> LGA1156/LGA1366
+    if any(x in microarch for x in ["nehalem", "westmere"]):
+        return "LGA1156"
+    
+    # Core (antiga), Wolfdale, Yorkfield -> LGA775
+    if any(x in microarch for x in ["core", "wolfdale", "yorkfield"]):
+        return "LGA775"
+    
+    # Pentium 4 y Celeron antiguos
+    if any(x in microarch for x in ["pentium e", "pentium g", "celeron e", "celeron g"]):
+        if "e2" in microarch or "e5" in microarch or "e6" in microarch:
+            return "LGA775"
+        if "e3" in microarch or "g3" in microarch or "g4" in microarch or "g5" in microarch or "g6" in microarch:
+            return "LGA1155"
+    
+    # Xeon antiguos
+    if "xeon" in microarch:
+        if any(x in microarch for x in ["e5", "e3"]):
+            return "LGA1155" if "e3" in microarch else "LGA2011"
+        if "e2" in microarch:
+            return "LGA1151"
+    
+    # Por defecto si no se puede determinar
+    print(f"[SOCKET] No se pudo determinar socket para: {microarch}")
     return None
 
 
@@ -210,7 +322,7 @@ def get_gpus():
     for name, chipset in cursor.fetchall():
         gpus.append({
             "label": f"{chipset} - {name}",
-            "value": name  # ✅ Enviar el nombre (lo que existe en BD)
+            "value": name  # Enviar el nombre (lo que existe en BD)
         })
 
     conn.close()
@@ -369,7 +481,7 @@ def check_compatibility():
     }
     
     if len(issues) == 0:
-        result["message"] = "✔️ Todos los componentes son compatibles."
+        result["message"] = "Todos los componentes son compatibles."
     else:
         result["issues"] = issues
     
