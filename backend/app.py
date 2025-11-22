@@ -174,9 +174,9 @@ def get_components(component_type):
 # ------------------------------------------------
 def deduce_socket(microarch):
     microarch = microarch.lower()
-    if "zen 4" in microarch:
+    if "zen 5" in microarch:
         return "AM5"
-    if "zen" in microarch:
+    if "zen 4" or "zen 3" or "zen 2" in microarch:
         return "AM4"
     if "raptor" in microarch or "alder" in microarch:
         return "LGA1700"
