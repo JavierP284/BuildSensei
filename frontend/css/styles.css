@@ -276,7 +276,152 @@ small.helper {
     cursor: not-allowed;
 }
 
-/* responsive */
+/* ===================================
+   ANÁLISIS DE COMPATIBILIDAD
+   =================================== */
+
+#result-box {
+    margin-top: 28px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Secciones de resultados */
+.result-line {
+    padding: 12px 14px;
+    margin: 10px 0;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95em;
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.result-line.ok {
+    background: linear-gradient(90deg, rgba(40, 167, 69, 0.08), rgba(40, 167, 69, 0.02));
+    color: #155724;
+    border-left-color: var(--success);
+}
+
+.result-line.bad {
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.08), rgba(220, 53, 69, 0.02));
+    color: #721c24;
+    border-left-color: var(--danger);
+}
+
+.result-line.warning {
+    background: linear-gradient(90deg, rgba(255, 176, 32, 0.08), rgba(255, 176, 32, 0.02));
+    color: #856404;
+    border-left-color: var(--warning);
+}
+
+/* Sección de análisis de potencia */
+.power-analysis-section {
+    margin-top: 24px;
+    padding: 18px 16px;
+    background: linear-gradient(135deg, rgba(0, 123, 255, 0.04), rgba(0, 198, 255, 0.04));
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.06);
+}
+
+.power-analysis-section h4 {
+    margin: 0 0 16px 0;
+    color: var(--text);
+    font-size: 1.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.power-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 123, 255, 0.1);
+    font-size: 0.95em;
+}
+
+.power-detail:last-child {
+    border-bottom: none;
+}
+
+.power-detail .label {
+    font-weight: 600;
+    color: #34495e;
+}
+
+.power-detail .value {
+    font-family: 'Courier New', monospace;
+    color: var(--accent);
+    font-weight: 700;
+    background: rgba(0, 123, 255, 0.06);
+    padding: 4px 10px;
+    border-radius: 6px;
+    min-width: 80px;
+    text-align: right;
+}
+
+.power-detail .value.positive {
+    color: #155724;
+    background: rgba(40, 167, 69, 0.08);
+}
+
+.power-detail .value.negative {
+    color: #721c24;
+    background: rgba(220, 53, 69, 0.08);
+    animation: pulse-warning 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(220, 53, 69, 0);
+    }
+}
+
+/* Secciones de issues y warnings */
+.issues-section,
+.warnings-section {
+    margin-top: 16px;
+}
+
+.issues-section {
+    padding-left: 2px;
+}
+
+.warnings-section {
+    padding-left: 2px;
+}
+
+/* Responsive */
 @media (max-width: 520px) {
     .container {
         padding: 28px 20px;
@@ -288,4 +433,28 @@ small.helper {
     .choices__inner { min-height: 42px !important; }
     header h1 { font-size:1.5em; }
     .btn { padding: 9px 12px; }
+
+    .power-detail {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .power-detail .value {
+        width: 100%;
+        text-align: left;
+    }
+
+    .result-line {
+        padding: 10px 12px;
+        font-size: 0.9em;
+    }
+
+    .power-analysis-section {
+        padding: 14px 12px;
+    }
+
+    .power-analysis-section h4 {
+        font-size: 0.98em;
+    }
 }
