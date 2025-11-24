@@ -61,6 +61,8 @@ CREATE TABLE video_card (
     price REAL,
     chipset TEXT,
     memory INTEGER,
+    core_clock REAL,     
+    boost_clock REAL,    
     length REAL
 );
 

@@ -421,6 +421,54 @@ small.helper {
     padding-left: 2px;
 }
 
+/* ===================================
+   SECCIÓN: Análisis de Cuello de Botella
+   =================================== */
+.bottleneck-section {
+    margin-top: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(111,66,193,0.04), rgba(111,66,193,0.02));
+    border-left: 4px solid #6f42c1;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(111,66,193,0.04);
+}
+
+.bottleneck-section h4 {
+    margin: 0 0 10px 0;
+    color: var(--text);
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bottleneck-section .label {
+    font-weight: 600;
+    color: #34495e;
+}
+
+.bottleneck-section .value {
+    font-family: 'Courier New', monospace;
+    color: #6f42c1;
+    font-weight: 700;
+}
+
+.bottleneck-section .reason {
+    color: #4b5563;
+    margin-top: 8px;
+    font-size: 0.95em;
+}
+
+/* Nuevos estilos para detalles de cuello de botella */
+.bottleneck-details {
+  padding: 10px 12px;
+  background: rgba(111,66,193,0.03);
+  border-radius: 6px;
+  border: 1px solid rgba(111,66,193,0.06);
+  font-size: 0.95em;
+  color: #334155;
+}
+
 /* Responsive */
 @media (max-width: 520px) {
     .container {
@@ -456,5 +504,13 @@ small.helper {
 
     .power-analysis-section h4 {
         font-size: 0.98em;
+    }
+
+    .bottleneck-section {
+        padding: 12px;
+    }
+    .bottleneck-section .value {
+        display: inline-block;
+        margin-top: 6px;
     }
 }

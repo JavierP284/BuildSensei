@@ -140,6 +140,30 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
       }
 
+      // Mostrar análisis de cuello de botella (bottleneck_analysis) usando clases CSS
+      if (data.bottleneck_analysis) {
+        const bn = data.bottleneck_analysis;
+        // detalles opcionales (json)
+        const detailsId = 'bn-details-' + Math.random().toString(36).slice(2,8);
+        html += `
+          <div class="bottleneck-section">
+            <h4>⚖️ Análisis de Cuello de Botella</h4>
+            <div class="power-detail">
+              <span class="label">Resultado:</span>
+              <span class="value">${bn.summary}</span>
+            </div>
+            <button class="btn btn--ghost" type="button" data-details="${detailsId}">Más info</button>
+            <div id="${detailsId}" class="bottleneck-details" style="display:none;margin-top:10px;">
+              <div><strong>CPU núcleos:</strong> ${bn.details.cpu_cores ?? '—'}</div>
+              <div><strong>CPU boost:</strong> ${bn.details.cpu_boost_ghz ?? '—'} GHz</div>
+              <div><strong>CPU TDP:</strong> ${bn.details.cpu_tdp ?? '—'} W</div>
+              <div><strong>GPU TDP:</strong> ${bn.details.gpu_tdp ?? bn.details.gpu_tdp ?? '—'} W</div>
+              ${bn.details.note ? `<div style="margin-top:6px;color:#555;"><em>${bn.details.note}</em></div>` : ''}
+            </div>
+          </div>
+        `;
+      }
+      
       // Mostrar advertencias
       if (data.warnings && Array.isArray(data.warnings)) {
         html += `<div class="warnings-section">`;
@@ -150,6 +174,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       resultBox.innerHTML = html;
+      // activar toggles "Más info"
+      document.querySelectorAll('button[data-details]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-details');
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+        });
+      });
 
     } catch (err) {
       console.error(err);

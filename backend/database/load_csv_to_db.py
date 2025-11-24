@@ -52,6 +52,8 @@ TABLE_SPECS = {
             "price",
             "chipset",
             "memory",
+            "core_clock",
+            "boost_clock",
             "length"
         ]
     },

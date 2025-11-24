@@ -151,6 +151,82 @@ def get_gpu_power(gpu_name):
         return 150  # Valor por defecto conservador
 
 
+# ---------------------------
+# NUEVA FUNCIÓN: BOTTLENECK
+# ---------------------------
+def detect_bottleneck(cpu_cores, cpu_boost_ghz, cpu_tdp, gpu_tdp, gpu_chipset=None):
+    """
+    Heurística ajustada para detectar cuellos de botella.
+    Devuelve: { result, summary, details }
+    Ajustes principales:
+     - Umbrales menos sensibles para marcar "CPU significativamente superior".
+     - Regla explícita de "balanced" para CPUs y GPUs de muy alta gama.
+     - Summary legible y detalles numéricos separados.
+    """
+    cpu_cores = int(cpu_cores) if cpu_cores else 0
+    cpu_boost = float(cpu_boost_ghz) if cpu_boost_ghz else 0.0
+    cpu_tdp = safe_number(cpu_tdp) or 0
+    gpu_tdp = safe_number(gpu_tdp) or 0
+
+    cpu_score = cpu_cores * cpu_boost  # proxy simple: core-GHz
+    gpu_score = gpu_tdp
+
+    # Regla explícita: combos de muy alta gama se consideran balanceados
+    if cpu_score >= 80 and gpu_score >= 400:
+        return {
+            "result": "no_significant_bottleneck",
+            "summary": "Combo de alta gama: no se detecta un cuello de botella significativo.",
+            "details": {"cpu_score": round(cpu_score,1), "gpu_tdp": gpu_tdp, "cpu_cores": cpu_cores, "cpu_boost_ghz": cpu_boost}
+        }
+
+    # Casos claros (CPU limita GPU)
+    if cpu_cores <= 4 and gpu_tdp >= 300:
+        return {
+            "result": "possible_cpu_bottleneck",
+            "summary": "La CPU podría limitar el rendimiento frente a esta GPU (CPU con pocos núcleos).",
+            "details": {"cpu_cores": cpu_cores, "cpu_boost_ghz": cpu_boost, "cpu_tdp": cpu_tdp, "gpu_tdp": gpu_tdp, "note": "GPU de alta demanda vs CPU con pocos núcleos."}
+        }
+
+    if cpu_boost < 3.5 and gpu_tdp >= 350:
+        return {
+            "result": "possible_cpu_bottleneck",
+            "summary": "La frecuencia de la CPU puede ser limitada para esta GPU.",
+            "details": {"cpu_cores": cpu_cores, "cpu_boost_ghz": cpu_boost, "cpu_tdp": cpu_tdp, "gpu_tdp": gpu_tdp, "note": "Frecuencia boost baja vs GPU potente."}
+        }
+
+    # GPU limita CPU — regla para detectar GPU débiles frente a CPUs muy potentes
+    if cpu_cores >= 10 and gpu_tdp <= 200:
+        return {
+            "result": "possible_gpu_bottleneck",
+            "summary": "La GPU podría limitar el rendimiento frente a esta CPU.",
+            "details": {"cpu_cores": cpu_cores, "cpu_boost_ghz": cpu_boost, "cpu_tdp": cpu_tdp, "gpu_tdp": gpu_tdp, "note": "CPU relativamente potente vs GPU de baja demanda."}
+        }
+
+    # Heurística general: relación CPU/GPU (menos sensible)
+    rel = cpu_score / max(1.0, gpu_score/50.0)  # normaliza gpu_tdp a escala similar
+
+    # Si la relación es muy alta, posible GPU bottleneck (umbral elevado)
+    if rel > 12.0:
+        return {
+            "result": "possible_gpu_bottleneck",
+            "summary": "La CPU es mucho más potente que la GPU; la GPU podría ser el cuello de botella.",
+            "details": {"cpu_score": round(cpu_score,1), "gpu_tdp": gpu_tdp, "cpu_cores": cpu_cores, "cpu_boost_ghz": cpu_boost, "note": "Relación CPU/GPU elevada."}
+        }
+
+    # Si la relación es muy baja, posible CPU bottleneck (umbral más estricto)
+    if gpu_score > 0 and rel < 1.8:
+        return {
+            "result": "possible_cpu_bottleneck",
+            "summary": "La relación CPU/GPU sugiere que la CPU podría limitar el rendimiento en algunos escenarios.",
+            "details": {"cpu_score": round(cpu_score,1), "gpu_tdp": gpu_tdp, "cpu_cores": cpu_cores, "cpu_boost_ghz": cpu_boost, "note": "Relación aproximada entre capacidad CPU y demanda GPU."}
+        }
+
+    return {
+        "result": "no_significant_bottleneck",
+        "summary": "No se detecta un cuello de botella evidente entre CPU y GPU.",
+        "details": {"cpu_cores": cpu_cores, "cpu_boost_ghz": cpu_boost, "cpu_tdp": cpu_tdp, "gpu_tdp": gpu_tdp}
+    }
+
 # ------------------------------------------------
 # CONEXIÓN A BD
 # ------------------------------------------------
@@ -373,25 +449,25 @@ def check_compatibility():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # GPU - Buscar por NAME y obtener CHIPSET
-    cursor.execute("SELECT chipset FROM video_card WHERE name = ?", (gpu,))
-    gpu_data = cursor.fetchone()
-    if not gpu_data:
+    # GPU - Buscar por NAME y obtener CHIPSET y clocks
+    cursor.execute("SELECT chipset, core_clock, boost_clock FROM video_card WHERE name = ?", (gpu,))
+    gpu_row = cursor.fetchone()
+    if not gpu_row:
         return jsonify({"error": "GPU no encontrada"}), 400
-    gpu_chipset = gpu_data[0]
+    gpu_chipset, gpu_core_clock, gpu_boost_clock = gpu_row
     print(f"GPU Name: {gpu}")
-    print(f"GPU Chipset: {gpu_chipset}")
+    print(f"GPU Chipset: {gpu_chipset}, core_clock: {gpu_core_clock}, boost_clock: {gpu_boost_clock}")
 
     # Ahora usar el CHIPSET para buscar el TDP
     gpu_power_tdp = get_gpu_power(gpu_chipset)
-    
-    # CPU
-    cursor.execute("SELECT microarchitecture FROM cpu WHERE name = ?", (cpu,))
-    cpu_data = cursor.fetchone()
-    if not cpu_data:
+
+    # CPU - obtener microarch + cores + boost + tdp
+    cursor.execute("SELECT microarchitecture, core_count, boost_clock, tdp FROM cpu WHERE name = ?", (cpu,))
+    cpu_row = cursor.fetchone()
+    if not cpu_row:
         return jsonify({"error": "CPU no encontrada"}), 400
-    cpu_microarch = cpu_data[0]
-    print(f"CPU Microarch: {cpu_microarch}")
+    cpu_microarch, cpu_core_count, cpu_boost_clock, cpu_tdp = cpu_row
+    print(f"CPU Microarch: {cpu_microarch}, cores: {cpu_core_count}, boost: {cpu_boost_clock}, tdp: {cpu_tdp}")
 
     # Motherboard
     cursor.execute("SELECT socket, max_memory, memory_slots FROM motherboard WHERE name = ?", (motherboard,))
@@ -493,6 +569,11 @@ def check_compatibility():
             f"PSU actual: {psu_wattage}W (margen: {int(psu_wattage - total_power_needed)}W)."
         )
 
+    # -----------------------------
+    # Calcular análisis de bottleneck
+    # -----------------------------
+    bottleneck = detect_bottleneck(cpu_core_count, cpu_boost_clock, cpu_tdp, gpu_power_tdp, gpu_chipset)
+
     conn.close()
 
     # ------------------------------------------------
@@ -510,7 +591,8 @@ def check_compatibility():
         "memory_analysis": {
             "modules_required": int(module_count),
             "slots_available": int(mb_slots_int)
-        }
+        },
+        "bottleneck_analysis": bottleneck
     }
     
     if len(issues) == 0:
