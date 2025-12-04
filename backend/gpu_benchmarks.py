@@ -63,7 +63,7 @@ GPU_BENCHMARK_URLS = {
     'Arc A750': 'https://www.techpowerup.com/gpu-specs/arc-a750.c3933',
     
     # NVIDIA Legacy (TechPowerUp Specs)
-    'GTX 1660 SUPER': 'https://www.techpowerup.com/gpu-specs/geforce-gtx-1660-super.c3442',
+    'GTX 1660 SUPER': 'https://www.techpowerup.com/gpu-specs/geforce-gtx-1660-super.c3458',
     'GTX 1660': 'https://www.techpowerup.com/gpu-specs/geforce-gtx-1660.c3365',
     'GT 710': 'https://www.techpowerup.com/gpu-specs/geforce-gt-710.c2966',
 }
