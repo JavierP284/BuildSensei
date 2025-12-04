@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request 
 import sqlite3
+from gpu_benchmarks import get_gpu_benchmark_url  # ← Nueva importación
 
 app = Flask(
     __name__,
@@ -574,6 +575,9 @@ def check_compatibility():
     # -----------------------------
     bottleneck = detect_bottleneck(cpu_core_count, cpu_boost_clock, cpu_tdp, gpu_power_tdp, gpu_chipset)
 
+    # Obtener URL de benchmark
+    gpu_benchmark_url = get_gpu_benchmark_url(gpu_chipset)
+
     conn.close()
 
     # ------------------------------------------------
@@ -592,7 +596,11 @@ def check_compatibility():
             "modules_required": int(module_count),
             "slots_available": int(mb_slots_int)
         },
-        "bottleneck_analysis": bottleneck
+        "bottleneck_analysis": bottleneck,
+        "gpu_benchmark": {
+            "chipset": gpu_chipset,
+            "url": gpu_benchmark_url
+        }
     }
     
     if len(issues) == 0:

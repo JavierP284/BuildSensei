@@ -469,6 +469,32 @@ small.helper {
   color: #334155;
 }
 
+/* Benchmark Link */
+.benchmark-section {
+    margin-top: 16px;
+    padding: 12px;
+    background: linear-gradient(90deg, rgba(0,102,204,0.04), rgba(0,102,204,0.02));
+    border-left: 4px solid #0066cc;
+    border-radius: 8px;
+}
+
+.benchmark-link {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.benchmark-link:hover {
+    background: rgba(0,102,204,0.1);
+    text-decoration: underline;
+}
+
 /* Responsive */
 @media (max-width: 520px) {
     .container {

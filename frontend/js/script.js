@@ -140,6 +140,17 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
       }
 
+      // Mostrar benchmark de GPU
+      if (data.gpu_benchmark && data.gpu_benchmark.url) {
+        html += `
+          <div class="benchmark-section" style="margin-top:16px;padding:12px;background:#f0f7ff;border-left:4px solid #0066cc;border-radius:8px;">
+            <a href="${data.gpu_benchmark.url}" target="_blank" rel="noopener noreferrer" class="benchmark-link">
+              📊 Ver benchmark de ${data.gpu_benchmark.chipset}
+            </a>
+          </div>
+        `;
+      }
+
       // Mostrar análisis de cuello de botella (bottleneck_analysis) usando clases CSS
       if (data.bottleneck_analysis) {
         const bn = data.bottleneck_analysis;
