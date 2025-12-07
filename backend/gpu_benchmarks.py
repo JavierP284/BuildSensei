@@ -15,13 +15,13 @@ GPU_BENCHMARK_URLS = {
     # NVIDIA RTX 40 Series (TechPowerUp Specs)
     'RTX 4090': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4090.c3889',
     'RTX 4080 SUPER': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4080-super.c4182',
-    'RTX 4080': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4080.c3937',
-    'RTX 4070 Ti SUPER': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4070-ti-super.c4186',
+    'RTX 4080': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4080.c3888',
+    'RTX 4070 Ti SUPER': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4070-ti-super.c4187',
     'RTX 4070 Ti': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4070-ti.c3950',
-    'RTX 4070 SUPER': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4070-super.c4185',
-    'RTX 4070': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4070.c3966',
-    'RTX 4060 Ti': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4060-ti.c4004',
-    'RTX 4060': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4060.c4013',
+    'RTX 4070 SUPER': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4070-super.c4186',
+    'RTX 4070': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4070.c3924',
+    'RTX 4060 Ti': 'https://www.techpowerup.com/review/nvidia-geforce-rtx-4060-ti-16-gb/',
+    'RTX 4060': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-4060.c4107',
     
     # NVIDIA RTX 30 Series (TechPowerUp Specs)
     'RTX 3090': 'https://www.techpowerup.com/gpu-specs/geforce-rtx-3090.c3622',
@@ -42,30 +42,30 @@ GPU_BENCHMARK_URLS = {
     'RX 7900 XTX': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7900-xtx.c3941',
     'RX 7900 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7900-xt.c3912',
     'RX 7900': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7900-gre.c4166', 
-    'RX 7800 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7800-xt.c4003',
-    'RX 7700 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7700-xt.c4180',
+    'RX 7800 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7800-xt.c3839',
+    'RX 7700 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7700-xt.c3911',
     'RX 7700': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7700.c4159', 
     'RX 7600 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7600-xt.c4190',
-    'RX 7600': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7600.c4054',
+    'RX 7600': 'https://www.techpowerup.com/gpu-specs/radeon-rx-7600.c4153',
     
     # AMD RX 6000 Series (TechPowerUp Specs)
-    'RX 6800 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6800-xt.c3678',
-    'RX 6800': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6800.c3685',
-    'RX 6750 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6750-xt.c3867',
+    'RX 6800 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6800-xt.c3694',
+    'RX 6800': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6800.c3713',
+    'RX 6750 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6750-xt.c3879',
     'RX 6700 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6700-xt.c3695',
-    'RX 6700': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6700.c3939',
-    'RX 6600 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6600-xt.c3746',
-    'RX 6600': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6600.c3795',
+    'RX 6700': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6700.c3716',
+    'RX 6600 XT': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6600-xt.c3774',
+    'RX 6600': 'https://www.techpowerup.com/gpu-specs/radeon-rx-6600.c3696',
     
     # Intel Arc (TechPowerUp Specs)
-    'Arc B580': 'PENDIENTE_LANZAMIENTO', # Modelo especulativo
-    'Arc A770': 'https://www.techpowerup.com/gpu-specs/arc-a770.c3915',
-    'Arc A750': 'https://www.techpowerup.com/gpu-specs/arc-a750.c3933',
+    'Arc B580': 'https://www.techpowerup.com/gpu-specs/arc-b580.c4244', 
+    'Arc A770': 'https://www.techpowerup.com/gpu-specs/arc-a770.c3914',
+    'Arc A750': 'https://www.techpowerup.com/gpu-specs/arc-a750.c3929',
     
     # NVIDIA Legacy (TechPowerUp Specs)
     'GTX 1660 SUPER': 'https://www.techpowerup.com/gpu-specs/geforce-gtx-1660-super.c3458',
     'GTX 1660': 'https://www.techpowerup.com/gpu-specs/geforce-gtx-1660.c3365',
-    'GT 710': 'https://www.techpowerup.com/gpu-specs/geforce-gt-710.c2966',
+    'GT 710': 'https://www.techpowerup.com/gpu-specs/geforce-gt-710.c1990',
 }
 
 # La función para obtener la URL no necesita cambios, ya que solo lee del diccionario
