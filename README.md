@@ -6,24 +6,44 @@ BuildSensei es un sistema experto diseñado para eliminar la incertidumbre al ar
 
 ---
 
-## 🚀 Descripción General
+## ¿Qué hace?
 
-BuildSensei funciona como un asistente inteligente para armar tu PC.  
-El sistema evalúa compatibilidades reales entre CPU, GPU, RAM, motherboard y PSU, asegurando que la configuración final no solo funcione, sino que esté equilibrada para evitar cuellos de botella.
-
----
-
-## 🔧 Características
-
-- **Selección de Componentes:** Elige entre una base de datos de CPUs, GPUs, motherboards, fuentes de poder y memoria RAM.
-- **Verificación de Compatibilidad:** El sistema experto valida compatibilidad eléctrica, de chipset, conectores y requerimientos mínimos.
-- **Balanceo de Rendimiento:** Recomienda ajustes si alguna pieza genera cuello de botella.
-- **Interfaz Intuitiva:** Frontend sencillo y directo para seleccionar los componentes.
-- **API de Compatibilidad:** Endpoint dedicado para validar compatibilidad entre piezas.
+- Comprueba que CPU, GPU, placa, memoria y fuente funcionen juntos.
+- Advierte si hay riesgo de cuello de botella.
+- Sugiere si la fuente de poder es suficiente.
+- Muestra enlaces de referencia a benchmarks de la GPU (cuando estén disponibles).
 
 ---
 
-## 🧰 Tecnologías Utilizadas
+## ¿Por qué usarlo?
+
+- Evita comprar piezas incompatibles.
+- Te da una guía rápida sobre equilibrio rendimiento/energía.
+- Ideal para usuarios que quieren armar su PC con confianza sin profundizar en detalles técnicos.
+
+---
+
+## Cómo probarlo localmente (Windows)
+
+1. Clona el repositorio:
+```sh
+git clone https://github.com/JavierP284/BuildSensei
+cd buildsensei
+```
+
+2. Instala las dependencias:
+```sh
+pip install -r requirements.txt
+```
+
+3. Ejecuta el servidor:
+```sh
+python app.py
+```
+
+---
+
+## Tecnologías Utilizadas
 
 ### Backend
 - Python  
@@ -51,5 +71,16 @@ Se encuentran en requirements.txt
 
 ### 1. Clonar el repositorio
 ```sh
-git clone https://github.com/tu-usuario/buildsensei.git
+git clone https://github.com/JavierP284/BuildSensei
 cd buildsensei
+```
+
+### 2. Instalar las dependencias
+```sh
+pip install -r requirements.txt
+```
+
+### 3. Ejecutar el servidor
+```sh
+python app.py
+```
