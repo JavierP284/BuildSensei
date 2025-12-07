@@ -420,15 +420,16 @@ def get_memory():
 def get_psus():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("SELECT name, wattage FROM power_supply")
+    # Usar id para evitar ambigüedades cuando hay múltiples entradas con el mismo nombre
+    cursor.execute("SELECT id, name, wattage FROM power_supply")
 
     psus = []
-    for name, wattage in cursor.fetchall():
+    for pid, name, wattage in cursor.fetchall():
         psus.append({
             "label": f"{name} - {wattage}W",
-            "value": name
+            "value": pid
         })
-
+ 
     conn.close()
     return jsonify(psus)
 
@@ -442,11 +443,11 @@ def check_compatibility():
     gpu = request.args.get("gpu")  # Ahora es el CHIPSET, no el NAME
     motherboard = request.args.get("motherboard")
     memory = request.args.get("memory")
-    psu = request.args.get("psu")
-
+    psu = request.args.get("psu")  # ahora esperamos el id de la PSU
+    
     print(f"\n=== DEBUG CHECK-COMPATIBILITY ===")
     print(f"GPU recibida: {gpu}")
-
+    
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -477,11 +478,16 @@ def check_compatibility():
     print(f"MB Socket: {mb_socket}, Max Memory: {mb_max_memory}, Slots: {mb_slots}")
 
     # PSU
-    cursor.execute("SELECT wattage FROM power_supply WHERE name = ?", (psu,))
+    # Validar y buscar PSU por id (más fiable)
+    psu_id = safe_number(psu)
+    if psu_id is None:
+        return jsonify({"error": "PSU inválida o no especificada (se espera id numérico)."}), 400
+    cursor.execute("SELECT wattage, name FROM power_supply WHERE id = ?", (int(psu_id),))
     psu_data = cursor.fetchone()
     if not psu_data:
         return jsonify({"error": "PSU no encontrada"}), 400
     psu_wattage = safe_number(psu_data[0])
+    psu_name = psu_data[1]
     print(f"PSU Wattage: {psu_wattage}")
 
     # RAM
@@ -575,9 +581,9 @@ def check_compatibility():
 
     # Obtener URL de benchmark
     gpu_benchmark_url = get_gpu_benchmark_url(gpu_chipset)
-
+    
     conn.close()
-
+    
     # ------------------------------------------------
     # RESULTADO
     # ------------------------------------------------
@@ -590,6 +596,7 @@ def check_compatibility():
             "psu_available": int(psu_wattage),
             "margin": int(psu_wattage - total_power_needed)
         },
+        "psu_selected": {"id": int(psu_id), "name": psu_name},
         "memory_analysis": {
             "modules_required": int(module_count),
             "slots_available": int(mb_slots_int)
