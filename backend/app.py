@@ -399,7 +399,7 @@ def get_gpus():
     for name, chipset in cursor.fetchall():
         gpus.append({
             "label": f"{chipset} - {name}",
-            "value": name  # Enviar el nombre (lo que existe en BD)
+            "value": chipset  # ← Cambiar de 'name' a 'chipset'
         })
 
     conn.close()
@@ -439,7 +439,7 @@ def get_psus():
 @app.route("/api/check-compatibility", methods=["GET"])
 def check_compatibility():
     cpu = request.args.get("cpu")
-    gpu = request.args.get("gpu")  # Este es el NAME de la GPU
+    gpu = request.args.get("gpu")  # Ahora es el CHIPSET, no el NAME
     motherboard = request.args.get("motherboard")
     memory = request.args.get("memory")
     psu = request.args.get("psu")
@@ -450,16 +450,14 @@ def check_compatibility():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # GPU - Buscar por NAME y obtener CHIPSET y clocks
-    cursor.execute("SELECT chipset, core_clock, boost_clock FROM video_card WHERE name = ?", (gpu,))
+    # GPU - Buscar por CHIPSET en lugar de NAME
+    cursor.execute("SELECT name FROM video_card WHERE chipset = ?", (gpu,))
     gpu_row = cursor.fetchone()
     if not gpu_row:
         return jsonify({"error": "GPU no encontrada"}), 400
-    gpu_chipset, gpu_core_clock, gpu_boost_clock = gpu_row
-    print(f"GPU Name: {gpu}")
-    print(f"GPU Chipset: {gpu_chipset}, core_clock: {gpu_core_clock}, boost_clock: {gpu_boost_clock}")
-
-    # Ahora usar el CHIPSET para buscar el TDP
+    gpu_name = gpu_row[0]
+    gpu_chipset = gpu  # Ya tenemos el chipset
+    
     gpu_power_tdp = get_gpu_power(gpu_chipset)
 
     # CPU - obtener microarch + cores + boost + tdp
